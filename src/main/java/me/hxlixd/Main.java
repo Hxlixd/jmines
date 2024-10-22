@@ -2,25 +2,17 @@ package me.hxlixd;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main {
     private static final int GRID_SIZE = 5;
     private int clickedNonMineCount = 0;
-    private ExecutorService soundExecutor = Executors.newCachedThreadPool(); // Cached thread pool for sound playback
     private JButton[][] buttons = new JButton[GRID_SIZE][GRID_SIZE];
     private Set<Point> mines = new HashSet<>();
     private Map<String, ImageIcon> iconCache = new HashMap<>();
@@ -106,7 +98,6 @@ public class Main {
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                soundExecutor.shutdown(); // Properly shut down the executor
                 System.exit(0);
             }
         });

@@ -28,7 +28,6 @@ public class Main {
 
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Left panel
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setPreferredSize(new Dimension(260, frame.getHeight()));
@@ -37,7 +36,6 @@ public class Main {
         mineLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         leftPanel.add(mineLabel);
 
-        // ComboBox for selecting mine count (1 to 24 mines)
         Integer[] mineOptions = new Integer[24];
         for (int i = 0; i < mineOptions.length; i++) {
             mineOptions[i] = i + 1;
@@ -47,20 +45,16 @@ public class Main {
         mineDropdown.setAlignmentX(Component.CENTER_ALIGNMENT);
         leftPanel.add(mineDropdown);
 
-        // Start Game button
         JButton startButton = new JButton("Play");
         startButton.setMaximumSize(new Dimension(200, 30));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         leftPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        leftPanel.add(startButton);
-
-        // Add top margin to the leftPanel
         leftPanel.setBorder(BorderFactory.createEmptyBorder(100, 10, 0, 0));
+        leftPanel.add(startButton);
 
 
         panel.add(leftPanel, BorderLayout.WEST);
 
-        // Center panel for the game grid
         JPanel gridPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
@@ -70,9 +64,8 @@ public class Main {
         }
         panel.add(gridPanel, BorderLayout.CENTER);
 
-        // Wrap the gridPanel inside a JPanel with an empty border
         JPanel gridWrapper = new JPanel(new BorderLayout());
-        gridWrapper.setBorder(BorderFactory.createEmptyBorder(50, 10, 50, 50)); // Add margin: top, left, bottom, right
+        gridWrapper.setBorder(BorderFactory.createEmptyBorder(50, 10, 50, 50));
         gridWrapper.add(gridPanel, BorderLayout.CENTER);
 
         panel.add(gridWrapper, BorderLayout.CENTER);
@@ -81,18 +74,14 @@ public class Main {
         frame.add(panel);
         frame.setVisible(true);
 
-        // Start button action listener
         startButton.addActionListener(e -> {
-            resetGrid(); // Reset the game grid
             int mineCount = (int) Objects.requireNonNull(mineDropdown.getSelectedItem());
             placeMines(mineCount);
             enableGame();
-            //playSound("play");
             new Thread(() -> new AudioHandle("play")).start();
             System.out.println("Game started with " + mineCount + " mines.");
         });
 
-        // Mine dropdown menu action listener
         mineDropdown.addActionListener(e -> new Thread(() -> new AudioHandle("combobox")).start());
 
         frame.addWindowListener(new WindowAdapter() {
@@ -185,11 +174,9 @@ public class Main {
                 }
 
                 button.setEnabled(false);
-                clickedNonMineCount++; // Increment the counter for non-mine clicks
+                clickedNonMineCount++;
 
-                // Check if the player has clicked all non-mine buttons
                 if (clickedNonMineCount == (GRID_SIZE * GRID_SIZE - mines.size())) {
-                    // Play jackpot sound
                     new Thread(() -> new AudioHandle("jackpot")).start();
                     JOptionPane.showMessageDialog(null, "Congratulations! You cleared the board!");
                     disableAllButtons();
@@ -205,7 +192,6 @@ public class Main {
                 button.setEnabled(false);
 
                 if (mines.contains(new Point(i, j))) {
-                    // Show all mines
                     try {
                         Image scaledBomb = getCachedIcon("bomb", button.getWidth(), button.getHeight()).getImage();
                         ImageIcon bombIcon = new ImageIcon(scaledBomb);
@@ -215,7 +201,6 @@ public class Main {
                         System.out.println("Error loading bomb image: " + ex);
                     }
                 } else {
-                    // Show gems for non-mine buttons
                     try {
                         Image scaledGem = getCachedIcon("gem", button.getWidth(), button.getHeight()).getImage();
                         ImageIcon gemIcon = new ImageIcon(scaledGem);

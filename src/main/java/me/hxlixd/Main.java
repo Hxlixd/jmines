@@ -75,6 +75,7 @@ public class Main {
         frame.setVisible(true);
 
         startButton.addActionListener(e -> {
+            resetGrid();
             int mineCount = (int) Objects.requireNonNull(mineDropdown.getSelectedItem());
             placeMines(mineCount);
             enableGame();
